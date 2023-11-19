@@ -1,133 +1,127 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RecetaService } from './tienda.service';
+import { TiendaService } from './tienda.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TypeOrmTestingConfig } from '../shared/testing-utils/typeorm-testing-config';
-import { RecetaEntity } from './tienda.entity';
+import { TiendaEntity } from './tienda.entity';
 import { faker } from '@faker-js/faker';
 
-describe('RecetaService', () => {
-  let service: RecetaService;
-  let repository: Repository<RecetaEntity>;
-  let recetaList: RecetaEntity[];
+describe('TiendaService', () => {
+  let service: TiendaService;
+  let repository: Repository<TiendaEntity>;
+  let tiendaList: TiendaEntity[];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [...TypeOrmTestingConfig()],
-      providers: [RecetaService],
+      providers: [TiendaService],
     }).compile();
 
-    service = module.get<RecetaService>(RecetaService);
-    repository = module.get<Repository<RecetaEntity>>(
-      getRepositoryToken(RecetaEntity),
+    service = module.get<TiendaService>(TiendaService);
+    repository = module.get<Repository<TiendaEntity>>(
+      getRepositoryToken(TiendaEntity),
     );
     await seedDatabase();
   });
 
   const seedDatabase = async () => {
     repository.clear();
-    recetaList = [];
+    tiendaList = [];
     for (let i = 0; i < 5; i++) {
-      const receta: RecetaEntity = await repository.save({
+      const tienda: TiendaEntity = await repository.save({
         nombre: faker.company.name(),
-        descripcion: faker.lorem.sentence(),
-        foto: faker.image.url(),
-        procesoPreparacion: faker.lorem.sentence(),
-        video: faker.image.url(),
+        ciudad: faker.location.city(),
+        direccion: faker.lorem.sentence(),
       });
-      recetaList.push(receta);
+      tiendaList.push(tienda);
     }
   };
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-  it('findAll deberia retornar todos las recetas', async () => {
-    const recetas: RecetaEntity[] = await service.findAll();
-    expect(recetas).not.toBeNull();
-    expect(recetas).toHaveLength(recetaList.length);
+  it('findAll deberia retornar todos las tiendas', async () => {
+    const tiendas: TiendaEntity[] = await service.findAll();
+    expect(tiendas).not.toBeNull();
+    expect(tiendas).toHaveLength(tiendaList.length);
   });
 
-  it('findOne deberia retornar una receta por id', async () => {
-    const storedReceta: RecetaEntity = recetaList[0];
-    const receta: RecetaEntity = await service.findOne(storedReceta.id);
-    expect(receta).not.toBeNull();
-    expect(receta.nombre).toEqual(storedReceta.nombre);
+  it('findOne deberia retornar una tienda por id', async () => {
+    const storedTienda: TiendaEntity = tiendaList[0];
+    const tienda: TiendaEntity = await service.findOne(storedTienda.id);
+    expect(tienda).not.toBeNull();
+    expect(tienda.nombre).toEqual(storedTienda.nombre);
   });
 
-  it('findOne deberia generar una exepcion si no existe la receta', async () => {
+  it('findOne deberia generar una exepcion si no existe la tienda', async () => {
     await expect(() => service.findOne('0')).rejects.toHaveProperty(
       'message',
-      'La receta con el id indicado no fue encontrada',
+      'La tienda con el id indicado no fue encontrada',
     );
   });
 
-  it('create deberia retornar una nueva receta', async () => {
-    const receta: RecetaEntity = {
+  it('create deberia retornar una nueva tienda', async () => {
+    const tienda: TiendaEntity = {
       id: '',
       nombre: faker.company.name(),
-      descripcion: faker.lorem.sentence(),
-      foto: faker.image.url(),
-      procesoPreparacion: faker.lorem.sentence(),
-      video: faker.image.url(),
-      restaurante: [],
-      culturaGastronomica: null,
+      ciudad: faker.location.city(),
+      direccion: faker.lorem.sentence(),
       producto: [],
     };
 
-    const nuevaReceta: RecetaEntity = await service.create(receta);
-    expect(nuevaReceta).not.toBeNull();
+    const nuevaTienda: TiendaEntity = await service.create(tienda);
+    expect(nuevaTienda).not.toBeNull();
 
-    const recetaAlmacenado: RecetaEntity = await repository.findOne({
-      where: { id: nuevaReceta.id },
+    const tiendaAlmacenado: TiendaEntity = await repository.findOne({
+      where: { id: nuevaTienda.id },
     });
-    expect(recetaAlmacenado).not.toBeNull();
-    expect(recetaAlmacenado.nombre).toEqual(nuevaReceta.nombre);
+    expect(tiendaAlmacenado).not.toBeNull();
+    expect(tiendaAlmacenado.nombre).toEqual(nuevaTienda.nombre);
   });
 
-  it('update deberia actualizar una receta', async () => {
-    const receta: RecetaEntity = recetaList[0];
-    receta.nombre = 'Nuevo nombre';
-    const recetaActualizado: RecetaEntity = await service.update(
-      receta.id,
-      receta,
+  it('update deberia actualizar una tienda', async () => {
+    const tienda: TiendaEntity = tiendaList[0];
+    tienda.nombre = 'Nuevo nombre';
+    const tiendaActualizado: TiendaEntity = await service.update(
+      tienda.id,
+      tienda,
     );
-    expect(recetaActualizado).not.toBeNull();
-    const recetaAlmacenado: RecetaEntity = await repository.findOne({
-      where: { id: receta.id },
+    expect(tiendaActualizado).not.toBeNull();
+    const tiendaAlmacenado: TiendaEntity = await repository.findOne({
+      where: { id: tienda.id },
     });
-    expect(recetaAlmacenado).not.toBeNull();
-    expect(recetaAlmacenado.nombre).toEqual(receta.nombre);
+    expect(tiendaAlmacenado).not.toBeNull();
+    expect(tiendaAlmacenado.nombre).toEqual(tienda.nombre);
   });
 
-  it('update deberia generar una excepcion para una receta no valida', async () => {
-    let receta: RecetaEntity = recetaList[0];
-    receta = {
-      ...receta,
+  it('update deberia generar una excepcion para una tienda no valida', async () => {
+    let tienda: TiendaEntity = tiendaList[0];
+    tienda = {
+      ...tienda,
       nombre: 'Nuevo nombre',
     };
-    await expect(() => service.update('0', receta)).rejects.toHaveProperty(
+    await expect(() => service.update('0', tienda)).rejects.toHaveProperty(
       'message',
-      'La receta con el id indicado no fue encontrada',
+      'La tienda con el id indicado no fue encontrada',
     );
   });
 
-  it('delete deberia borrar una receta', async () => {
-    const receta: RecetaEntity = recetaList[0];
-    await service.delete(receta.id);
+  it('delete deberia borrar una tienda', async () => {
+    const tienda: TiendaEntity = tiendaList[0];
+    await service.delete(tienda.id);
 
-    const recetaBorrado: RecetaEntity = await repository.findOne({
-      where: { id: receta.id },
+    const tiendaBorrado: TiendaEntity = await repository.findOne({
+      where: { id: tienda.id },
     });
-    expect(recetaBorrado).toBeNull();
+    expect(tiendaBorrado).toBeNull();
   });
 
-  it('delete deberia generar una excepcion para una receta no valida', async () => {
-    const receta: RecetaEntity = recetaList[0];
-    await service.delete(receta.id);
+  it('delete deberia generar una excepcion para una tienda no valida', async () => {
+    const tienda: TiendaEntity = tiendaList[0];
+    await service.delete(tienda.id);
     await expect(() => service.delete('0')).rejects.toHaveProperty(
       'message',
-      'La receta con el id indicado no fue encontrada',
+      'La tienda con el id indicado no fue encontrada',
     );
   });
 });

@@ -16,7 +16,7 @@ import { ProductoDto } from './producto.dto';
 import { ProductoEntity } from './producto.entity';
 
 @UseInterceptors(BusinessErrorsInterceptor)
-@Controller('productos')
+@Controller('products')
 export class ProductoController {
   constructor(private readonly productoService: ProductoService) {}
   @Get()

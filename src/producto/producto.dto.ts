@@ -5,8 +5,8 @@ export class ProductoDto {
   readonly nombre: string;
   @IsString()
   @IsNotEmpty()
-  readonly descripcion: string;
+  readonly precio: string;
   @IsString()
   @IsNotEmpty()
-  readonly historia: string;
+  readonly tipo: string;
 }

@@ -37,7 +37,7 @@ describe('TiendaProductoService', () => {
 
     tienda = await tiendaRepository.save({
       nombre: faker.company.name(),
-      ciudad: faker.lorem.sentence(),
+      ciudad: faker.location.city(),
       direccion: faker.lorem.sentence(),
     });
 
@@ -52,7 +52,7 @@ describe('TiendaProductoService', () => {
     expect(service).toBeDefined();
   });
 
-  it('addProductoReceta deberia generar excepcion al no encontrar producto', async () => {
+  it('addProductoTienda deberia generar excepcion al no encontrar producto', async () => {
     await expect(() =>
       service.addProductoTienda(tienda.id, '0'),
     ).rejects.toHaveProperty(
@@ -61,16 +61,16 @@ describe('TiendaProductoService', () => {
     );
   });
 
-  it('addProductoReceta deberia generar excepción al no encontrar receta', async () => {
+  it('addProductoTienda deberia generar excepción al no encontrar tienda', async () => {
     await expect(() =>
       service.addProductoTienda('0', producto.id),
     ).rejects.toHaveProperty(
       'message',
-      'La receta con el id indicado no fue encontrado',
+      'La tienda con el id indicado no fue encontrado',
     );
   });
 
-  it('addProductoReceta deberia relacionar el producto a la receta', async () => {
+  it('addProductoTienda deberia relacionar el producto a la tienda', async () => {
     const result: TiendaEntity = await service.addProductoTienda(
       tienda.id,
       producto.id,
@@ -80,10 +80,10 @@ describe('TiendaProductoService', () => {
     expect(result.producto[0].nombre).toBe(producto.nombre);
   });
 
-  it('findProductoReceta deberia retornar los productos de una receta', async () => {
+  it('findProductoTienda deberia retornar los productos de una tienda', async () => {
     const nuevoTienda: TiendaEntity = await tiendaRepository.save({
       nombre: faker.company.name(),
-      ciudad: faker.lorem.sentence(),
+      ciudad: faker.location.city(),
       direccion: faker.lorem.sentence(),
     });
     await service.addProductoTienda(nuevoTienda.id, producto.id);
@@ -95,10 +95,10 @@ describe('TiendaProductoService', () => {
     expect(productos[0].nombre).toBe(producto.nombre);
   });
 
-  it('deleteProductoReceta deberia eliminar el producto de la receta', async () => {
+  it('deleteProductoTienda deberia eliminar el producto de la tienda', async () => {
     const nuevoTienda: TiendaEntity = await tiendaRepository.save({
       nombre: faker.company.name(),
-      ciudad: faker.lorem.sentence(),
+      ciudad: faker.location.city(),
       direccion: faker.lorem.sentence(),
     });
     await service.addProductoTienda(nuevoTienda.id, producto.id);

@@ -14,6 +14,6 @@ export class ProductoEntity {
   @Column()
   tipo: string;
 
-  @ManyToMany(() => TiendaEntity, (receta) => receta.producto)
-  receta: TiendaEntity[];
+  @ManyToMany(() => TiendaEntity, (tienda) => tienda.producto)
+  tienda: TiendaEntity[];
 }

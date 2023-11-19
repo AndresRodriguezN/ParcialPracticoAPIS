@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 export class TiendaDto {
   @IsString()
   @IsNotEmpty()
@@ -6,7 +6,7 @@ export class TiendaDto {
   @IsString()
   @IsNotEmpty()
   readonly ciudad: string;
-  @IsUrl()
+  @IsString()
   @IsNotEmpty()
   readonly direccion: string;
 }

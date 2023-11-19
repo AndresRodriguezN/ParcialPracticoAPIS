@@ -30,7 +30,7 @@ export class TiendaProductoService {
       relations: ['producto'],
         });
         if (!tienda) {
-      throw new BusinessLogicException('La receta con el id indicado no fue encontrado',BusinessError.NOT_FOUND);
+      throw new BusinessLogicException('La tienda con el id indicado no fue encontrado',BusinessError.NOT_FOUND);
         }
 
         tienda.producto.push(producto);
@@ -46,7 +46,7 @@ export class TiendaProductoService {
             relations: ['producto'],
         });
         if (!tienda) {
-            throw new BusinessLogicException('La receta con el id indicado no fue encontrado', BusinessError.NOT_FOUND);
+            throw new BusinessLogicException('La tienda con el id indicado no fue encontrado', BusinessError.NOT_FOUND);
         }
         return tienda.producto ?? [];
     }
@@ -58,7 +58,7 @@ export class TiendaProductoService {
         });
 
         if (!tienda) {
-            throw new BusinessLogicException('La receta con el id indicado no fue encontrado', BusinessError.NOT_FOUND);
+            throw new BusinessLogicException('La tienda con el id indicado no fue encontrado', BusinessError.NOT_FOUND);
         }
 
         const producto: ProductoEntity = await this.productoRepository.findOne({ where: { id: productoId } });

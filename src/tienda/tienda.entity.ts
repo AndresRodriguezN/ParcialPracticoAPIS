@@ -17,7 +17,7 @@ export class TiendaEntity {
   ciudad: string;
   @Column()
   direccion: string;
-  @ManyToMany(() => ProductoEntity, (producto) => producto.receta)
+  @ManyToMany(() => ProductoEntity, (producto) => producto.tienda)
   @JoinTable()
   producto: ProductoEntity[];
 }

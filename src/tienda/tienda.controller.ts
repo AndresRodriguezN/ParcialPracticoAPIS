@@ -17,7 +17,7 @@ import { TiendaEntity } from './tienda.entity';
 import { TiendaDto } from './tienda.dto';
 
 @UseInterceptors(BusinessErrorsInterceptor)
-@Controller('tiendas')
+@Controller('stores')
 export class TiendaController {
   constructor(private readonly tiendaServices: TiendaService) {}
 

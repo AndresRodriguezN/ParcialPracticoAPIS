@@ -16,14 +16,14 @@ export class ProductoService {
 
   async findAll(): Promise<ProductoEntity[]> {
     return await this.productoRepository.find({
-      relations: ['culturaGastronomica', 'categoria', 'receta'],
+      relations: ['tienda'],
     });
   }
 
   async findOne(id: string): Promise<ProductoEntity> {
     const producto: ProductoEntity = await this.productoRepository.findOne({
       where: { id },
-      relations: ['receta'],
+      relations: ['tienda'],
     });
     if (!producto)
       throw new BusinessLogicException(

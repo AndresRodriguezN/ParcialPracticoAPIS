@@ -16,22 +16,22 @@ export class TiendaService {
 
   async findAll(): Promise<TiendaEntity[]> {
     return await this.tiendaRepository.find({
-      relations: ['culturaGastronomica'],
+      relations: ['producto'],
     });
   }
 
   async findOne(id: string): Promise<TiendaEntity> {
-    const receta: TiendaEntity = await this.tiendaRepository.findOne({
+    const tienda: TiendaEntity = await this.tiendaRepository.findOne({
       where: { id },
       relations: ['producto'],
     });
-    if (!receta)
+    if (!tienda)
       throw new BusinessLogicException(
-        'La receta con el id indicado no fue encontrada',
+        'La tienda con el id indicado no fue encontrada',
         BusinessError.NOT_FOUND,
       );
 
-    return receta;
+    return tienda;
   }
 
   async create(tienda: TiendaEntity): Promise<TiendaEntity> {
@@ -44,7 +44,7 @@ export class TiendaService {
     });
     if (!persistedTienda)
       throw new BusinessLogicException(
-        'La receta con el id indicado no fue encontrada',
+        'La tienda con el id indicado no fue encontrada',
         BusinessError.NOT_FOUND,
       );
     tienda.id = id;
@@ -57,7 +57,7 @@ export class TiendaService {
     });
     if (!tienda)
       throw new BusinessLogicException(
-        'La receta con el id indicado no fue encontrada',
+        'La tienda con el id indicado no fue encontrada',
         BusinessError.NOT_FOUND,
       );
     await this.tiendaRepository.remove(tienda);
